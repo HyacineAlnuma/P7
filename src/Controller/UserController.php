@@ -39,4 +39,13 @@ class UserController extends AbstractController
         
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
+
+    #[Route('/api/users/{id}', name: 'delete_user', methods: ['DELETE'])]
+    public function deleteUser(User $user, EntityManagerInterface $em): JsonResponse
+    {
+        $em->remove($user);
+        $em->flush();
+        
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
 }
