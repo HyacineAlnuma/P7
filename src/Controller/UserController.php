@@ -5,32 +5,45 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
+use JMS\Serializer\SerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\SerializationContext;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
 {
-    #[Route('/api/users/{id}', name: 'get_users', methods: ['GET'])]
-    public function getClientsUsers(int $id, UserRepository $userRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    #[Route('/api/users/client/{id}', name: 'get_users', methods: ['GET'])]
+    public function getAllClientsUsers(int $id, UserRepository $userRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
         $idCache = "getClientsUsers" . $id;
 
         $jsonUserList = $cache->get($idCache, function (ItemInterface $item) use ($userRepository, $id, $serializer) {
             echo("L'élément n'est pas encore en cache \n");
             $item->tag("usersCache");
+            $context = SerializationContext::create()->setGroups(['getUsers']);
             $userList = $userRepository->findBy(['client' => $id]);
-            return $serializer->serialize($userList, 'json', ['groups' => 'getUsers']);
+            return $serializer->serialize($userList, 'json', $context);
         });
     
         return new JsonResponse($jsonUserList, Response::HTTP_OK, [], true);
+    }
+
+    #[Route('/api/users/{id}', name: 'get_user', methods: ['GET'])]
+    public function getOneClientsUser(int $id, UserRepository $userRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    {
+        $user = $userRepository->findBy(['id' => $id]);
+
+        $context = SerializationContext::create()->setGroups(['getUsers']);
+        $jsonUser = $serializer->serialize($user, 'json', $context);
+        
+        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/users', name: 'create_user', methods: ['POST'])]
@@ -51,7 +64,8 @@ class UserController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'getUsers']);
+        $context = SerializationContext::create()->setGroups(['getUsers']);
+        $jsonUser = $serializer->serialize($user, 'json', $context);
         
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
