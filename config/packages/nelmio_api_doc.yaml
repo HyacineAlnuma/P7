@@ -1,0 +1,79 @@
+# config\packages\nelmio_api_doc.yaml
+
+nelmio_api_doc:
+    documentation:
+        info:
+            title: BileMo
+            description: Bienvenue sur l'API de BileMo !
+            version: 2.0.0
+        paths:
+            /api/login_check:
+                post:
+                    operationId: postCredentialsItem
+                    tags:
+                        - Token
+                    summary: Permet d'obtenir le token JWT pour se logger.
+                    requestBody:
+                        description: Crée un nouveau token JWT.
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/Credentials'
+                    responses:
+                        '200':
+                            description: Récupère le token JWT.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Token'
+            /api/users:
+                post:
+                    operationId: postUsersItem
+                    tags:
+                        - Users
+                    summary: Permet de créer un utilisateur.
+                    requestBody:
+                        description: Crée un nouvel utilisateur.
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/User'
+                    responses:
+                        '200':
+                            description: Crée un nouvel utilisateur.
+        components:
+            schemas:
+                Token:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            readOnly: true
+                User:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                            default: Nouvel utilisateur
+                        idClient:
+                            type: int
+                            default: 0
+                Credentials:
+                    type: object
+                    properties:
+                        username:
+                            type: string
+                            default: client0@bilemoapi.com
+                        password:
+                            type: string
+                            default: password0
+            securitySchemes:
+                bearerAuth:
+                    type: apiKey
+                    in: header
+                    name: Authorization # or another header name
+        security:
+            - bearerAuth: []
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

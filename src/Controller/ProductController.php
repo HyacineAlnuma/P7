@@ -11,10 +11,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Attributes as OA;
 
 class ProductController extends AbstractController
 {
+    /**
+     * Permet de récupérer la liste des produits.
+     */
     #[Route('/api/products', name: 'get_products', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Retourne la liste des produits.',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: Product::class))
+        )
+    )]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Security(name: 'Bearer')]
     public function getAllProducts(ProductRepository $productRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
         $idCache = "getAllProducts";
@@ -30,7 +46,20 @@ class ProductController extends AbstractController
         return new JsonResponse($jsonProductList, Response::HTTP_OK, [], true);
     }
 
+    /**
+     * Permet de récupérer un produit.
+     */
     #[Route('/api/product/{id}', name: 'get_product', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Retourne un produit.',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: Product::class))
+        )
+    )]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Security(name: 'Bearer')]
     public function getProduct(Product $product, ProductRepository $productRepository, SerializerInterface $serializer): JsonResponse
     {     
         $jsonProduct = $serializer->serialize($product, 'json');
