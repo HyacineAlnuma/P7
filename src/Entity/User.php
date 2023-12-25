@@ -47,6 +47,12 @@ class User
     #[Groups(['getUsers'])]
     private ?Client $client = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['getUsers'])]
+    #[Assert\NotBlank(message: "L'email est obligatoire")]
+    #[Assert\Length(min: 1, max: 255, minMessage: "L'email doit faire au moins {{ limit }} caractères", maxMessage: "L'email ne peut pas faire plus de {{ limit }} caractères")]
+    private ?string $email = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,6 +78,18 @@ class User
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

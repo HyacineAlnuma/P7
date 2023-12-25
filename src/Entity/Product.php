@@ -30,8 +30,19 @@ class Product
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom est obligatoire")]
-    #[Assert\Length(min: 1, max: 255, minMessage: "Le nom doit faire au moins {{ limit }} caractères", maxMessage: "Le nom ne peut pas faire plus de {{ limit }} caractères")]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La capacité est obligatoire")]
+    private ?string $capacity = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le poids est obligatoire")]
+    private ?string $weight = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La taille de l'écran est obligatoire")]
+    private ?string $screenSize = null;
 
     public function getId(): ?int
     {
@@ -46,6 +57,42 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?string
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(string $capacity): static
+    {
+        $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getWeight(): ?string
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(string $weight): static
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getScreenSize(): ?string
+    {
+        return $this->screenSize;
+    }
+
+    public function setScreenSize(string $screenSize): static
+    {
+        $this->screenSize = $screenSize;
 
         return $this;
     }

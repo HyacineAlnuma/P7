@@ -31,7 +31,7 @@ nelmio_api_doc:
                     operationId: postUsersItem
                     tags:
                         - Users
-                    summary: Permet de créer un utilisateur.
+                    summary: Permet de créer un utilisateur lié à un client.
                     requestBody:
                         description: Crée un nouvel utilisateur.
                         content:
@@ -55,9 +55,9 @@ nelmio_api_doc:
                         name:
                             type: string
                             default: Nouvel utilisateur
-                        idClient:
-                            type: int
-                            default: 0
+                        email:
+                            type: string
+                            default: exemple@gmail.com
                 Credentials:
                     type: object
                     properties:
