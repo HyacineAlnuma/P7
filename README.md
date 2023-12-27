@@ -2,7 +2,7 @@
 
 ## CONTEXT
 
-This project is about building an API for "BileMo", which is a website that references mobiles phones, and allow clients to check the products aswell as adding and deleting users that linked to them. I built the API using Symfony.
+This project is about building an API for "BileMo", which is a website that references mobiles phones, and allow clients to check the products aswell as adding and deleting users that are linked to them. I built the API using Symfony.
 
 ## INSTALLATION
 
