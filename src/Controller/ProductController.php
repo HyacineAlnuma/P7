@@ -6,6 +6,7 @@ use App\Entity\Product;
 use OpenApi\Attributes as OA;
 use App\Repository\ProductRepository;
 use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Contracts\Cache\ItemInterface;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -28,7 +29,7 @@ class ProductController extends AbstractController
         description: 'Retourne la liste des produits.',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: Product::class))
+            items: new OA\Items(ref: new Model(type: Product::class, groups: ['getProducts']))
         )
     )]
     #[OA\Parameter(
@@ -59,7 +60,8 @@ class ProductController extends AbstractController
             }
             $item->tag("productsCache");
             $item->expiresAfter(3600);
-            return $serializer->serialize($productList, 'json');
+            $context = SerializationContext::create()->setGroups(['getProducts']);
+            return $serializer->serialize($productList, 'json', $context);
         });
         
         return new JsonResponse($jsonProductList, Response::HTTP_OK, [], true);
@@ -74,14 +76,15 @@ class ProductController extends AbstractController
         description: 'Retourne un produit.',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: Product::class))
+            items: new OA\Items(ref: new Model(type: Product::class, groups: ['getProduct']))
         )
     )]
     #[OA\Tag(name: 'Products')]
     #[OA\Security(name: 'Bearer')]
-    public function getProduct(Product $product, ProductRepository $productRepository, SerializerInterface $serializer): JsonResponse
+    public function getProduct(Product $product, SerializerInterface $serializer): JsonResponse
     {     
-        $jsonProduct = $serializer->serialize($product, 'json');
+        $context = SerializationContext::create()->setGroups(['getProduct']);
+        $jsonProduct = $serializer->serialize($product, 'json', $context);
         
         return new JsonResponse($jsonProduct, Response::HTTP_OK, [], true);
     }

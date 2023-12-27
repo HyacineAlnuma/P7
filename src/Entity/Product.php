@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\ProductRepository;
+use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Symfony\Component\Validator\Constraints as Assert;
  
 
 /**
@@ -15,7 +16,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          "get_product",
  *          parameters = { "id" = "expr(object.getId())" }
  *      ),
- *      exclusion = @Hateoas\Exclusion(groups="getBooks")
+ *      exclusion = @Hateoas\Exclusion(groups="getProducts")
  * )
  *
  */
@@ -26,21 +27,26 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getProduct'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['getProduct', 'getProducts'])]
     #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['getProduct'])]
     #[Assert\NotBlank(message: "La capacité est obligatoire")]
     private ?string $capacity = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['getProduct'])]
     #[Assert\NotBlank(message: "Le poids est obligatoire")]
     private ?string $weight = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['getProduct'])]
     #[Assert\NotBlank(message: "La taille de l'écran est obligatoire")]
     private ?string $screenSize = null;
 

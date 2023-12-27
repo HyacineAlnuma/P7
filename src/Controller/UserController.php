@@ -61,9 +61,12 @@ class UserController extends AbstractController
         $idCache = "getClientsUsers" . $id . "page" . $page . "limit" . $limit;
 
         $jsonUserList = $cache->get($idCache, function (ItemInterface $item) use ($userRepository, $id, $page, $limit, $serializer) {
+            $userList = $userRepository->findClientsUsersPaginated($id, $page, $limit);
+            if (empty($userList)) {
+                throw new HttpException(404);
+            }
             $item->tag("usersCache");
             $context = SerializationContext::create()->setGroups(['getUsers']);
-            $userList = $userRepository->findClientsUsersPaginated($id, $page, $limit);
             return $serializer->serialize($userList, 'json', $context);
         });
     
@@ -79,7 +82,7 @@ class UserController extends AbstractController
         description: 'Retourne un utilisateurs lié à un client.',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: new Model(type: User::class, groups: ['getUsers']))
+            items: new OA\Items(ref: new Model(type: User::class, groups: ['getUser']))
         )
     )]
     #[OA\Tag(name: 'Users')]
@@ -87,7 +90,7 @@ class UserController extends AbstractController
     #[IsGranted('view', 'user', 'Access denied')]
     public function getOneClientsUser(User $user, UserRepository $userRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
-        $context = SerializationContext::create()->setGroups(['getUsers']);
+        $context = SerializationContext::create()->setGroups(['getUser']);
         $jsonUser = $serializer->serialize($user, 'json', $context);
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
@@ -115,7 +118,7 @@ class UserController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        $context = SerializationContext::create()->setGroups(['getUsers']);
+        $context = SerializationContext::create()->setGroups(['getUser']);
         $jsonUser = $serializer->serialize($user, 'json', $context);
         
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
