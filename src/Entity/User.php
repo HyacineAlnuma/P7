@@ -17,9 +17,10 @@ class User
 
     #[ORM\Column(length: 255)]
     #[Groups(['getUsers'])]
-    private ?string $Name = null;
+    private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['getUsers'])]
     private ?Client $client = null;
 
     public function getId(): ?int
@@ -29,22 +30,22 @@ class User
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): static
+    public function setName(string $name): static
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getClient(): ?client
+    public function getClient(): ?Client
     {
         return $this->client;
     }
 
-    public function setClient(?client $client): static
+    public function setClient(?Client $client): static
     {
         $this->client = $client;
 
