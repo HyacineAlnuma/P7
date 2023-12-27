@@ -20,6 +20,13 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $this->loadProducts($manager);
+        $this->loadClientsAndUsers($manager);
+
+        $manager->flush();
+    }
+
+    private function loadProducts(ObjectManager $manager) {
         $capacities = ['64', '128', '256'];
         for ($i = 0; $i < 20; $i++) {
             $product = new Product;
@@ -30,7 +37,9 @@ class AppFixtures extends Fixture
             $product->setScreenSize((rand(60, 70) / 10) . ' inches');
             $manager->persist($product);
         }
+    }
 
+    private function loadClientsAndUsers(ObjectManager $manager) {
         $clientList = [];
         for ($i = 0; $i < 10; $i++) {
             $client = new Client;
@@ -49,7 +58,5 @@ class AppFixtures extends Fixture
             $user->setClient($clientList[array_rand($clientList)]);
             $manager->persist($user);
         }
-
-        $manager->flush();
     }
 }
