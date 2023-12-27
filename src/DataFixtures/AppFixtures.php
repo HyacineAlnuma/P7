@@ -20,9 +20,14 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $capacities = ['64', '128', '256'];
         for ($i = 0; $i < 20; $i++) {
             $product = new Product;
             $product->setName('Téléphone ' . $i);
+            $randomCap = array_rand($capacities, 1);
+            $product->setCapacity($capacities[$randomCap] . 'go');
+            $product->setWeight(rand(150, 210) . 'g');
+            $product->setScreenSize((rand(60, 70) / 10) . ' inches');
             $manager->persist($product);
         }
 
@@ -40,6 +45,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 30; $i++) {
             $user = new User;
             $user->setName('Utilisateur ' . $i);
+            $user->setEmail("user" . $i . "@bilemoapi.com");
             $user->setClient($clientList[array_rand($clientList)]);
             $manager->persist($user);
         }

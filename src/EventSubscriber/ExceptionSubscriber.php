@@ -15,10 +15,25 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $exception = $event->getThrowable();
 
         if ($exception instanceof HttpException) {
-            $data = [
-                'status' => $exception->getStatusCode(),
-                'message' => $exception->getMessage()
-            ];
+            switch ($exception->getStatusCode()) {
+                case 404:
+                    $data = [
+                        'status' => 404,
+                        'message' => 'Object not found.'
+                    ];
+                    break;
+                case 400:
+                    $data = [
+                        'status' => 400,
+                        'message' => 'Bad request.'
+                    ];
+                    break;
+                default:
+                    $data = [
+                        'status' => $exception->getStatusCode(),
+                        'message' => $exception->getMessage()
+                    ];
+            }
             $event->setResponse(new JsonResponse($data));
         } else {
             $data = [
