@@ -88,7 +88,7 @@ class UserController extends AbstractController
     #[OA\Tag(name: 'Users')]
     #[OA\Security(name: 'Bearer')]
     #[IsGranted('view', 'user', 'Access denied')]
-    public function getOneClientsUser(User $user, UserRepository $userRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
+    public function getOneClientsUser(User $user, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
         $context = SerializationContext::create()->setGroups(['getUser']);
         $jsonUser = $serializer->serialize($user, 'json', $context);

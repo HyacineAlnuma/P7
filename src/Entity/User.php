@@ -44,7 +44,6 @@ class User
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['getUser'])]
     private ?Client $client = null;
 
     #[ORM\Column(length: 255)]
