@@ -17,7 +17,6 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          parameters = { "id" = "expr(object.getId())" }
  *      ),
  *      exclusion = @Hateoas\Exclusion(groups="getUsers"),
- *      exclusion = @Hateoas\Exclusion(groups="getUser")
  * )
  *
  * @Hateoas\Relation(
@@ -26,8 +25,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          "delete_user",
  *          parameters = { "id" = "expr(object.getId())" },
  *      ),
- *      exclusion = @Hateoas\Exclusion(groups="getUsers"),
-*      exclusion = @Hateoas\Exclusion(groups="getUser")
+ *      exclusion = @Hateoas\Exclusion(groups={"getUsers", "getUser"})
  * )
  */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -36,21 +34,21 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getUsers'])]
+    #[Groups(['getUser'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['getUsers', 'getUser'])]
+    #[Groups(['getUser', 'getUsers'])]
     #[Assert\NotBlank(message: "Le nom est obligatoire")]
     #[Assert\Length(min: 1, max: 255, minMessage: "Le nom doit faire au moins {{ limit }} caractères", maxMessage: "Le nom ne peut pas faire plus de {{ limit }} caractères")]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['getUsers'])]
+    #[Groups(['getUser'])]
     private ?Client $client = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['getUsers'])]
+    #[Groups(['getUser'])]
     #[Assert\NotBlank(message: "L'email est obligatoire")]
     #[Assert\Length(min: 1, max: 255, minMessage: "L'email doit faire au moins {{ limit }} caractères", maxMessage: "L'email ne peut pas faire plus de {{ limit }} caractères")]
     private ?string $email = null;
