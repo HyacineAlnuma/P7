@@ -121,7 +121,7 @@ class UserController extends AbstractController
         $context = SerializationContext::create()->setGroups(['getUser']);
         $jsonUser = $serializer->serialize($user, 'json', $context);
         
-        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+        return new JsonResponse($jsonUser, Response::HTTP_CREATED, [], true);
     }
 
     /**

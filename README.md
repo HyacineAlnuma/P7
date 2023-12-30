@@ -16,6 +16,12 @@ To install the dependencies of the project run the following command:
 composer install
 ```
 
+To generate the SSL keys run the following command:
+```
+php bin/console lexik:jwt:generate-keypair
+```
+(If it doesn't work create a 'jwt' folder in the config folder before running the command)
+
 ### Environment variables
 
 Create a .env.local file at the root of the project which is a copy of the .env file where you update the following variables with your own configuration:
@@ -31,3 +37,9 @@ php bin/console doctrine:fixtures:load
 ```
 
 You can now check the documentation and try the API via https://localhost:8000/api/doc.
+
+If you want to try the API via an other tool you can use these credentials to authenticate:
+{
+  "username": "client0@bilemoapi.com",
+  "password": "password0"
+}

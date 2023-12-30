@@ -49,6 +49,7 @@ class User
     #[ORM\Column(length: 255)]
     #[Groups(['getUser'])]
     #[Assert\NotBlank(message: "L'email est obligatoire")]
+    #[Assert\Email(message: "{{ value }} n'est pas un email valide.",)]
     #[Assert\Length(min: 1, max: 255, minMessage: "L'email doit faire au moins {{ limit }} caractères", maxMessage: "L'email ne peut pas faire plus de {{ limit }} caractères")]
     private ?string $email = null;
 
