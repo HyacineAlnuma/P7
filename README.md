@@ -39,7 +39,9 @@ php bin/console doctrine:fixtures:load
 You can now check the documentation and try the API via https://localhost:8000/api/doc.
 
 If you want to try the API via an other tool you can use these credentials to authenticate:
+```
 {
   "username": "client0@bilemoapi.com",
   "password": "password0"
 }
+```
