@@ -8,7 +8,7 @@ This project is about building an API for "BileMo", which is a website that refe
 
 To clone the project run the following command: 
 ```
-git clone https://github.com/HyacineAlnuma/PHP-P7.git
+https://github.com/HyacineAlnuma/Projet_API-Symfony.git
 ```
 
 To install the dependencies of the project run the following command:
